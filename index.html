@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Will you be my Valentine?</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+:root{
+  --bg1:#ffd6e7;
+  --bg2:#ffeef6;
+  --yes:#ff3b7a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  font-family:system-ui,sans-serif;
+  overflow:hidden;
+}
+.card{
+  background:#ffffffee;
+  padding:24px;
+  border-radius:24px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  max-width:420px;
+  position:relative;
+  z-index:2;
+}
+.photo{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:12px;
+}
+h1{
+  font-size:28px;
+  margin:10px 0;
+}
+button{
+  padding:14px 22px;
+  font-size:18px;
+  font-weight:800;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  margin:8px;
+}
+#yesBtn{background:var(--yes);color:#fff}
+#noBtn{background:#e5e7eb}
+#result{display:none;margin-top:12px}
+.music-btn{
+  font-size:14px;
+  background:#111827;
+  color:#fff;
+}
+
+/* FLOATING EMOJIS */
+.emoji{
+  position:fixed;
+  bottom:-50px;
+  font-size:28px;
+  animation:floatUp linear infinite;
+  opacity:.8;
+}
+@keyframes floatUp{
+  from{transform:translateY(0);}
+  to{transform:translateY(-110vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <!-- Put photo.jpg in same folder -->
+  <img src="photo.jpg" alt="Us 💕" class="photo">
+
+  <h1>Sheeba, will you be my Valentine? 💖🐱💞</h1>
+
+  <button id="yesBtn">Yes 💘</button>
+  <button id="noBtn">No 🙈</button>
+  <br>
+  <button class="music-btn" id="musicBtn">▶ Play Cute BGM 🎵</button>
+
+  <div id="result">
+    <h2>YAYYYY 🐱💖🎉</h2>
+    <p>My pookie forever 😽💞💞</p>
+  </div>
+</div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <!-- Rename your cute song to bgm.mp3 -->
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const result=document.getElementById("result");
+const music=document.getElementById("bgMusic");
+const musicBtn=document.getElementById("musicBtn");
+
+const confettiInstance=confetti.create(document.body,{resize:true});
+
+musicBtn.addEventListener("click",()=>{
+  if(music.paused){
+    music.play();
+    musicBtn.textContent="⏸ Pause BGM 🐱";
+  }else{
+    music.pause();
+    musicBtn.textContent="▶ Play Cute BGM 🎵";
+  }
+});
+
+noBtn.addEventListener("mouseenter",()=>{
+  noBtn.style.position="absolute";
+  noBtn.style.left=Math.random()*70+"%";
+  noBtn.style.top=Math.random()*70+"%";
+});
+
+yesBtn.addEventListener("click",()=>{
+  result.style.display="block";
+  confettiInstance({particleCount:250,spread:140});
+  if(music.paused) music.play();
+  spawnEmojis();
+});
+
+/* EMOJI RAIN */
+const emojis=["🐱","😽","💖","💞","💕","💘","🐾"];
+function spawnEmojis(){
+  for(let i=0;i<30;i++){
+    const e=document.createElement("div");
+    e.className="emoji";
+    e.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left=Math.random()*100+"vw";
+    e.style.animationDuration=4+Math.random()*4+"s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),9000);
+  }
+}
+</script>
+
+</body>
+</html>

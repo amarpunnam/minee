@@ -72,6 +72,48 @@ button{
   from{transform:translateY(0);}
   to{transform:translateY(-110vh);}
 }
+/* ✨ Sparkles */
+.sparkle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff, rgba(255,255,255,0));
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: sparkleFloat linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sparkleFloat {
+  from {
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-10vh) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* 🌸 Flowers */
+.flower {
+  position: fixed;
+  top: -40px;
+  font-size: 26px;
+  animation: flowerFall linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes flowerFall {
+  from {
+    transform: translateY(0) rotate(0deg);
+  }
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
 </style>
 </head>
 
@@ -97,7 +139,7 @@ button{
 <!-- MUSIC -->
 <audio id="bgMusic" loop>
   <!-- Rename your cute song to bgm.mp3 -->
-  <source src="bgm.mp3" type="audio/mpeg">
+  <source src="bgm.mp4" type="audio/mpeg">
 </audio>
 
 <script>
@@ -127,9 +169,12 @@ noBtn.addEventListener("mouseenter",()=>{
 
 yesBtn.addEventListener("click",()=>{
   result.style.display="block";
-  confettiInstance({particleCount:250,spread:140});
+ for(let i=0;i<15;i++){
+  spawnFlower();
+  spawnSparkle();
   if(music.paused) music.play();
   spawnEmojis();
+  }
 });
 
 /* EMOJI RAIN */
@@ -145,6 +190,29 @@ function spawnEmojis(){
     setTimeout(()=>e.remove(),9000);
   }
 }
+/* ✨ Sparkle generator */
+function spawnSparkle() {
+  const s = document.createElement("div");
+  s.className = "sparkle";
+  s.style.left = Math.random() * 100 + "vw";
+  s.style.animationDuration = 6 + Math.random() * 6 + "s";
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 12000);
+}
+setInterval(spawnSparkle, 600);
+
+/* 🌸 Continuous flower rain */
+const flowers = ["🌸","🌼","💐","🌺","🌷"];
+function spawnFlower() {
+  const f = document.createElement("div");
+  f.className = "flower";
+  f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+  f.style.left = Math.random() * 100 + "vw";
+  f.style.animationDuration = 8 + Math.random() * 6 + "s";
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 15000);
+}
+setInterval(spawnFlower, 800);
 </script>
 
 </body>
